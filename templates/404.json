@@ -1,0 +1,16 @@
+// "name"                 --> name of the json template
+// "layout"(optional)     --> layout to use when rendering the template (default is theme.liquid)
+// "wrapper"(optional)    --> HTML wrapper for templates' sections.
+// "sections"             --> contains sections' ids as keys and section data as values
+// "order"                --> contains array ids of section ids.
+
+{
+    "name":"Template 404",
+    "sections": {
+        "template":
+        {"type": "template-404"} 
+    },
+    "order": [
+        "template"
+    ]
+}
