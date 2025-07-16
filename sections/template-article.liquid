@@ -31,8 +31,7 @@
                 {% if article.image != blank %}
                     <img class="w-full h-80 md:h-96 object-cover object-center rounded-lg" src="{{ article.image | img_url: 'large' }}" alt="{{ article.image.alt }}">
                 {% else %}
-                    {% assign placeholder_image = 'lifestyle-2' %}
-                    {{ placeholder_image | placeholder_svg_tag: 'w-full h-80 md:h-96 object-cover object-center p-5' }}
+                    {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-80 md:h-96 object-cover object-center p-5' }}
                 {% endif %}
             </div>
         {% when 'article_content' %}
@@ -70,7 +69,9 @@
                 {% endpaginate %}
             </div>
         {% else %}
-            There are no comments in this article.
+            <div class="flex-1 items-center justify-center mx-auto max-w-4xl px-4 text-center">
+                <h1 class="text-lg mb-4 font-medium"> There are no comments in this article.</h1>   
+            </div>
         {% endif %}
     </div>
 
