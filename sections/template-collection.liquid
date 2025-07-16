@@ -1,9 +1,11 @@
 <div class="px-4 py-8">
-    {% paginate collection.products by section.settings.number_products_per_page %}
+    {% assign per_page = section.settings.col | times: section.settings.row %}
+
+    {% paginate collection.products by per_page %}
         <h1 class="text-3xl text-center">{{ collection.title }}</h1>
         
         <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-{{section.settings.col}} gap-4">
                 {% for product in collection.products %}
                     {% render 'product-card', product: product, settings: section.settings %}
                 {% else %}
@@ -20,10 +22,44 @@
         "name":"Template Collection",
         "settings": [
             {
-                "type": "number",
-                "id": "number_products_per_page",
-                "default": 6,
-                "label":"Number of products per page"
+                "type": "select",
+                "id": "col",
+                "label": "Number of products columns",
+                "options": [
+                  {
+                    "value": "3",
+                    "label": "3"
+                  },
+                  {
+                    "value": "4",
+                    "label": "4"
+                  },
+                  {
+                    "value": "5",
+                    "label": "5"
+                  }
+                ],
+                "default": "3"
+            },
+            {
+                "type": "select",
+                "id": "row",
+                "label": "Number of products rows",
+                "options": [
+                  {
+                    "value": "1",
+                    "label": "1"
+                  },
+                  {
+                    "value": "2",
+                    "label": "2"
+                  },
+                  {
+                    "value": "3",
+                    "label": "3"
+                  }
+                ],
+                "default": "2"
             },
             {
                 "type": "checkbox",
