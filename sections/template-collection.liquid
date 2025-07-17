@@ -1,6 +1,6 @@
 <div class="px-4 py-8">
     {% assign per_page = section.settings.col | times: section.settings.row %}
-
+    <a href="{{ routes.collections_url }}" class="text-base text-gray-500 text-center block my-4 hover:underline">Go back to collections</a>
     {% paginate collection.products by per_page %}
         <h1 class="text-3xl text-center">{{ collection.title }}</h1>
         
