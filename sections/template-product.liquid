@@ -43,12 +43,12 @@
             </div>
 
         </div>
-
+        
 
         <div class="product--information sticky top-5 p-2">
             {% form 'product', product, id: 'product-form', novalidate: 'novalidate' %}
                 <input type="hidden" name="id" value="{{ selected_variant.id }}">
-
+                <input type="hidden" name="properties[Final Sale]" value="{{selected_variant.price}}" />
                 {% for block in section.blocks %}
                     {% case block.type %}
                         {% when 'vendor' %}
@@ -133,7 +133,7 @@
                                     {% endif %}
                                 </button>
                             </div>
-
+                                    {{ cart.attributes }}
                         {% else %}
                             
                     {% endcase %}
@@ -155,6 +155,7 @@
         onVariantChange() {
             this.getSelectedOptions();
             this.getSelectedVariant();
+            
             if (this.currentVariant){ 
                 this.updateUrl();
                 this.updateFormID();
