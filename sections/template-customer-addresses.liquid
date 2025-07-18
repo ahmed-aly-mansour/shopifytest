@@ -1,13 +1,16 @@
-<div class="max-w-6xl mx-auto px-4 py-12">
+<div x-data="{addressForm : false}" class="max-w-6xl mx-auto px-4 py-12">
     <div class="flex flex-col md:flex-row items-center justify-between my-5 gap-4">
         <h1 class="text-2xl font-bold text-gray-700">Addresses</h1>
 
-        <button type="button" class="text-white font-medium bg-gray-700 hover:bg-gray-900 px-6 py-2 cursor-pointer">
+        <button x-on:click="addressForm = true" type="button" class="text-white font-medium bg-gray-700 hover:bg-gray-900 px-6 py-2 cursor-pointer">
             Create new address
         </button>
 
         <a href="{{ routes.account_url }}" class="text-gray-600 hover:text-gray-800 font-medium underline">back to account</a>
     </div>
+
+    {% render 'new-address-form' %}
+
     <div>
         {% paginate customer.addresses by 10 %}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-12 p-4 md:p-12">
