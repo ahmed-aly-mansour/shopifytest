@@ -17,7 +17,7 @@
                         {% for item in search.results %}
                                 {% case item.object_type %}
                                     {% when 'product' %}
-                                        {% render 'product-card', product: item %}
+                                        {% render 'product-card', product: item, settings: section.settings %}
                                     {% else %}
                                         
                                 {% endcase %}
@@ -36,3 +36,17 @@
         {% render 'pagination', pagination: paginate %}
     {% endpaginate %}
 </div>
+
+{% schema %}
+    {
+        "name": "Product Info",
+        "settings": [
+            {
+                "type": "checkbox",
+                "id": "toggle_vendor",
+                "default": true,
+                "label":"Show Vendor"
+            }
+        ]
+    }
+{% endschema %}
