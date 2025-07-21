@@ -859,6 +859,21 @@
   .pt-3 {
     padding-top: calc(var(--spacing) * 3);
   }
+  .pt-\[100\%\] {
+    padding-top: 100%;
+  }
+  .pt-\[min\(\)\] {
+    padding-top: min();
+  }
+  .pt-\[min\(calc\(\)\)\] {
+    padding-top: min(calc());
+  }
+  .pt-\[min\(calc\(100\)\)\] {
+    padding-top: min(calc(100));
+  }
+  .pt-\[min\(calc\)\] {
+    padding-top: min(calc);
+  }
   .pr-10 {
     padding-right: calc(var(--spacing) * 10);
   }
