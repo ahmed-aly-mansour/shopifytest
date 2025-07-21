@@ -1,13 +1,13 @@
 
-<div x-show="addressForm" class="h-full w-full fixed inset-0 bg-gray-600/50 overflow-y-auto z-50">
+<div x-show="{{show_var}}" class="h-full w-full fixed inset-0 bg-gray-600/50 overflow-y-auto z-50">
     <div class="relative max-w-md mx-auto bg-white border top-20 p-4">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-medium">New Address</h2>
+            <h2 class="text-lg font-medium">{{formTitle}}</h2>
 
-            <button x-on:click="addressForm = false" class="cursor-pointer text-gray-500 ">{% render 'icon-close' %}</button>
+            <button x-on:click="{{show_var}} = false" class="cursor-pointer text-gray-500 ">{% render 'icon-close' %}</button>
         </div>
 
-        {% form 'customer_address', customer.new_address %}
+        {% form 'customer_address', edit_address %}
             <div class="mb-4">
                 <label for="address_fname_{{ form.id }}" class="uppercase text-gray-700 text-xs font-medium mb-2">First Name</label>
                 <input 
@@ -92,7 +92,6 @@
                 >
                     
                 </select>
-            
             </div>
             
             <div class="mb-4">
@@ -122,7 +121,13 @@
             </div>
 
             <div class="flex flex-row gap-2">
-                <button type="submit" class="cursor-pointer w-full font-medium text-white bg-gray-700 hover:bg-gray-900 px-4 py-2">Create Address</button>
+                <button type="submit" class="cursor-pointer w-full font-medium text-white bg-gray-700 hover:bg-gray-900 px-4 py-2">
+                    {% if show_var != "addressForm"%}
+                        Edit Address
+                    {% else %}
+                        Create Address
+                    {%endif %}
+                </button>
                 <button type="reset" class="cursor-pointer w-full font-medium text-gray-700 border border-gray-700 px-4 py-2">Cancel</button>
             </div>
 
@@ -130,100 +135,3 @@
     </div>
 </div>
 
-
-<script>
-    class CustomerAddress{
-        constructor(){
-            this.initCustomerAddress();
-            this.customerAddressesSelector();
-        }
-
-        initCustomerAddress(){
-            const allAddressesSelector = document.querySelectorAll('select[data-country-selector]');
-            if (allAddressesSelector.length < 1) return;
-            
-            allAddressesSelector.forEach(select => {
-                let selectedCountry = this.getSelectedCountry(select); 
-                
-                if (!selectedCountry) return;
-
-                let provinces = selectedCountry.dataset.provinces;
-                let arrayOfProvince = JSON.parse(provinces);
-                let provinceSelector = document.querySelectorAll(`#address_province_${select.dataset.id}`);
-                
-                // if there is a country with no provinces so we disabled the province selector.
-                if (arrayOfProvince.length < 1) {
-                    provinceSelector.setAttribute('disabled', 'disabled');
-                }else{
-                    provinceSelector.removeAttribute('disabled');
-                }
-
-                provinceSelector.innerHTML = "";
-                let options = '';
-                // generate or creating the options of provinces.
-                for(let index = 0;index < arrayOfProvince.length; index++){
-                    if(arrayOfProvince[index][0] === provinceSelector.getAttribute('value')){
-                        options += `<option value="${arrayOfProvince[index][0]}" selected>${arrayOfProvince[index][0]}</option>`;
-                        
-                    }else{
-                        options += `<option value="${arrayOfProvince[index][0]}">${arrayOfProvince[index][0]}</option>`;
-                    }
-                }
-
-                provinceSelector.innerHTML = options;
-            });
-        }
-
-        getSelectedCountry(select){
-            let option, selectedOption;
-            for(let index = 0; index < select.options.length; index++){
-                option = select.options[index];
-
-                if (option.value === select.getAttribute('value')){
-                    {% comment %} selectedOption = option;
-
-                    selectedOption.setAttribute('selected', 'selected');
-                    break; {% endcomment %}
-
-                    option.setAttribute('selected', 'selected');
-                    return option;
-                }
-            }
-
-            {% comment %} return selectedOption; {% endcomment %}
-        }
-
-        customerAddressesSelector(){
-            const addressesSelector = document.querySelectorAll("select[data-country-selector]");
-
-            if (addressesSelector.length < 1) return;
-
-            addressesSelector.forEach(select => {
-                select.addEventListener('change', function(e){
-                    let provinces = this.options[this.selectedIndex].dataset.provinces;
-
-                    let arrayOfProvince = JSON.parse(provinces);
-                    
-                    let provinceSelector = document.querySelector(`#address_province_${this.dataset.id}`);
-                
-                    if (arrayOfProvince.length < 1) {
-                        provinceSelector.setAttribute('disabled', 'disabled');
-                    }else{
-                        provinceSelector.removeAttribute('disabled');
-                    }
-
-                    provinceSelector.innerHTML = "";
-                    let options = '';
-                    for(let index = 0;index < arrayOfProvince.length; index++){
-                        options += `<option value="${arrayOfProvince[index][0]}">${arrayOfProvince[index][0]}</option>`; 
-                    }
-    
-                    provinceSelector.innerHTML = options;
-
-                });
-            });
-        }
-    }
-
-    const customerAddress = new CustomerAddress();
-</script>
