@@ -16,7 +16,7 @@
                                         {% assign collection_image = collection.products.first.image %}
                                     {% endif %}
         
-                                    <img class="w-full h-full object-cover transition ease-in-out duration-1000 hover:scale-105 transform" src="{{ collection_image | img_url:"medium" }}" alt="{{ collection.title | escape }}">
+                                    <img class="w-full h-full object-cover transition ease-in-out duration-1000 hover:scale-105 transform" src="{{ collection_image | image_url:"medium" }}" alt="{{ collection.title | escape }}" width="{{ collection_image.width }}" height="{{ collection_image.height }}">
                                 </div>
                             </a>
 

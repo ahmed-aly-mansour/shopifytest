@@ -3,7 +3,7 @@
         <a href="{{ product.url }}">
             <div class="h-80 overflow-hidden">
             {% if product.featured_image %}
-                    <img class="w-full h-full object-cover transition duration-1000 ease-in-out hover:scale-105 transform" src="{{ product.featured_image | img_url: "medium"}}" alt="{{ product.featured_image.alt }}">
+                    <img class="w-full h-full object-cover transition duration-1000 ease-in-out hover:scale-105 transform" src="{{ product.featured_image | image_url: "medium"}}" alt="{{ product.featured_image.alt }}" width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}">
                 {% else %}
                     {{ 'product-1' | placeholder_svg_tag: "w-full h-full object-cover bg-gray-100 transition duration-1000 ease-in-out hover:scale-105 transform" }}
                 {% endif %}
