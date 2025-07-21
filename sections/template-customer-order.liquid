@@ -15,7 +15,7 @@
                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-12 p-4 md:p-12">
                     <div class="w-full h-80 min-h-80 bg-grya-200 rounded-md overflow-hidden">
                         {% if line_item.image %}
-                            <img class="w-full h-full object-center object-cover" src="{{ line_item.image | image_url: "medium" }}" alt="{{ line_item.image.alt }}" width="{{ line_item.image.width }}" height="{{ line_item.image.height }}">
+                            <img class="w-full h-full object-center object-cover" src="{{ line_item.image | image_url: width: 300 }}" alt="{{ line_item.image.alt }}" width="{{ line_item.image.width }}" height="{{ line_item.image.height }}">
                         {% else %}
                             {{ 'product-1' | placeholder_svg_tag: "w-full h-full object-center object-cover" }}
                         {% endif %}
