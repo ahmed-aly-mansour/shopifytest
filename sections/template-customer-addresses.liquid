@@ -24,8 +24,17 @@
                             <div class="my-8 h-full">{{ address | format_address }}</div>
                             <div class="flex flex-row gap-2">
                                 <button x-on:click="address_{{ address.id }} = true" class="cursor-pointer w-full text-xs text-white bg-gray-700 hover:bg-gray-900 font-medium py-2">Edit</button>
-                                <button class="w-full text-xs cursor-pointer font-medium text-gray-700 border py-2">Delete</button>
+                                <button class="w-full text-xs cursor-pointer font-medium text-gray-700 border py-2"
+                                    data-delete-address
+                                    data-url="{{ address.url }}"
+                                >
+                                    Delete
+                                </button>
                             </div>
+                            
+                            <form method="post" action="{{ address.url }}">
+                                <input type="hidden" name="_method" value="delete">
+                            </form>
                         </div>
                         {% assign temp = 'address_' | append: address.id | escape %}
                         {% render 'address-form', show_var: temp, formTitle: "Edit Address", edit_address:address  %}
@@ -43,6 +52,25 @@
         constructor(){
             this.initCustomerAddress();
             this.customerAddressesSelector();
+            this.initDeleteAddressBtns();
+        }
+
+        initDeleteAddressBtns(){
+            const deleteBtns = document.querySelectorAll('button[data-delete-address]');
+            if (deleteBtns.length < 1) return;
+
+            deleteBtns.forEach(btn => {
+                btn.addEventListener("click", function(e){
+                    let url = this.dataset.url;
+
+                    let confirmation = window.confirm("Do you really want to delete this address?");
+
+                    if (confirmation){
+                        document.querySelector(`form[action="${url}"]`).submit();
+                    }
+                
+                });
+            });
         }
 
         initCustomerAddress(){
@@ -133,10 +161,4 @@
     }
 
     const customerAddress = new CustomerAddress();
-
-    function updateCountryAndProvincesData(){
-        console.log('sl;dkf;')
-    }
-
-    updateCountryAndProvincesData();
 </script>
