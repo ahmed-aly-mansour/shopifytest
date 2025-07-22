@@ -97,10 +97,31 @@
             {
                 "type": "number",
                 "id": "shipping_threshold",
-                "label": "Free Shipping Threshold ($)",
+                "label": "1) Free Shipping Threshold ($)",
                 "default": 0
+            },
+            {
+                "type": "number",
+                "id": "product1_threshold",
+                "label": "2) Product 1 Threshold ($)",
+                "default": 0
+            },
+            {
+                "type": "product",
+                "id": "free_threshold_product1",
+                "label": "Product if user reached Product 1 threshold"
+            },
+            {
+                "type": "number",
+                "id": "product2_threshold",
+                "label": "2) Product 2 Threshold ($)",
+                "default": 0
+            },
+            {
+                "type": "product",
+                "id": "free_threshold_product2",
+                "label": "Product if user reached Product 2 threshold"
             }
-
         ],
         "blocks": [
             {
