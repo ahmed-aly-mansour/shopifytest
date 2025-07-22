@@ -54,6 +54,8 @@
                     </div>
                     <div class="w-full my-4 md:w-80">
 
+                        {% render 'cart-shipping-progress-bar' %}
+
                         {% for block in section.blocks %}
                             {% case block.type %}
                                 {% when 'subtotal' %}
