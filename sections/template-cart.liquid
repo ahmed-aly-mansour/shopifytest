@@ -45,6 +45,27 @@
                     </tbody>
                 </table>
 
+                <div class="p-4 mb-5">
+                    <div class="max-w-6xl flex flex-col my-10 mx-auto">
+                        <div class="flex items-end justify-between my-5">
+                            <h1 class="text-3xl">Your Gifts</h1>
+                        </div>
+                    </div>
+                    {% comment %} add here the gifts if any {% endcomment %}
+                    {% assign cart_sub_total = cart.items_subtotal_price | divided_by: 100.0 %}
+                    {% assign first_threshold = section.settings.product1_threshold %}
+                    {% assign second_threshold = section.settings.product2_threshold %}
+
+                    {% if cart_sub_total >= second_threshold %}
+                        {% render 'product-gift', prod: section.settings.free_threshold_product1 %}              
+                        {% render 'product-gift', prod: section.settings.free_threshold_product2 %}
+                    {% elsif cart_sub_total >= first_threshold %}
+                        {% render 'product-gift', prod: section.settings.free_threshold_product1 %}
+                    {% else %}
+                        <p class="text-sm text-gray-700 text-center">You havn't unlocked any Gifts.</p>              
+                    {% endif %}
+                </div>
+
                 <div class="flex flex-col md:flex-row items-center justify-between">
                     <div class="w-full my-4">
                         <div class="flex flex-col items-start">
@@ -89,6 +110,8 @@
         </div>
     </div>
 {% endif %}
+
+
 
 {% schema %}
     {

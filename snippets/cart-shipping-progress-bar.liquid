@@ -1,25 +1,88 @@
 {% assign shipping_threshold = settings.shipping_threshold %}
+{% assign first_product_threshold = settings.product1_threshold | plus: 0.0 %}
+{% assign sec_product_threshold = settings.product2_threshold | plus: 0.0 %}
+
+
+{% if sec_product_threshold > 0 %}
+  {%  assign total = sec_product_threshold %}
+{% elsif first_product_threshold > 0 %}
+  {%  assign total = first_product_threshold %}
+{% elsif shipping_threshold > 0 %}
+  {%  assign total = shipping_threshold %}
+{% endif %}
+
 {% assign cart_subtotal_dollars = cart.items_subtotal_price | divided_by: 100.0 %}
-{% assign ratio = cart_subtotal_dollars | divided_by: shipping_threshold | times: 100 %}
+{% assign ratio = cart_subtotal_dollars | divided_by: total | times: 100 %}
+
+
+{% assign checkpoints = shipping_threshold | append: "," | append: first_product_threshold | append: "," | append: sec_product_threshold %}
+{% assign checkpoints = checkpoints | split: "," %}
+
+
+{% assign checkpoints_values = 'free shipping' | append: "," | append: settings.free_threshold_product1.title | append: "," | append: settings.free_threshold_product2.title%}
+{% assign checkpoints_values = checkpoints_values | split: "," %}
+
 
 {% if shipping_threshold > 0 %}
-  
-  
   <div class="w-full mb-4">
-    <p class="flex items-center mb-2 text-xs text-gray-700">
-      {% render 'icon-shipping' %}
-      {% if ratio < 100 %}
-        Spend {{ shipping_threshold | minus: cart_subtotal_dollars | times: 100 | money}} to get free shipping!
-      {% else %}
-        Your order is free shipped.
-      {% endif %}
-    </p>
-
-    <div class="w-full bg-gray-200 h-[10px] rounded-full">
-      <div class="h-[10px] bg-amber-300 rounded-full" style="width: min({{ ratio }}%, 100%)">
-            
-        </div>
+    <div class="flex items-center mb-5 text-xs text-gray-700">
+      
+      <div class="flex gap-2 flex-col mb-3">
+        {% if cart_subtotal_dollars < shipping_threshold  %}
+          <p class="flex flex-wrap items-center">
+            {% render 'icon-shipping' %} You are <strong>&nbsp;{{shipping_threshold | minus: cart_subtotal_dollars | times: 100 | money}}&nbsp;</strong> away from <strong>&nbsp;Free Shipping</strong>. 
+          </p>
+        {% elsif cart_subtotal_dollars < first_product_threshold %}
+          <p class="flex flex-wrap items-center">
+            {% render 'icon-shipping' %} You have unlocked <strong>&nbsp;Free Shipping&nbsp;</strong>.
+          </p>
+          <p class="flex flex-wrap items-center">
+            {% render 'icon-gift' %} And You are <strong>&nbsp;{{ first_product_threshold | minus: cart_subtotal_dollars | times: 100 | money }}&nbsp;</strong> away from <strong>&nbsp;{{ settings.free_threshold_product1.title }}&nbsp;</strong> Free Gift.
+          </p>
+        {% elsif cart_subtotal_dollars < sec_product_threshold %}
+          <p class="flex flex-wrap items-center">
+            {% render 'icon-shipping' %} You have unlocked <strong>&nbsp;Free Shipping&nbsp;</strong> and <strong>&nbsp;ONE Gifts</strong>.  
+          </p>
+          <p class="flex flex-wrap items-center">
+            {% render 'icon-gift' %} And You are <strong>&nbsp;{{ sec_product_threshold | minus: cart_subtotal_dollars | times: 100 | money }}&nbsp;</strong> away from <strong>&nbsp;{{ settings.free_threshold_product2.title }}&nbsp;</strong> Free Gift.
+          </p>
+        {% else %}
+          <p class="flex flex-wrap items-center">
+            {% render 'icon-gift' %} You have unlocked <strong>&nbsp;Free Shipping&nbsp;</strong> and <strong>&nbsp;TWO Gifts</strong>.
+          </p>
+        {% endif %}
+      </div>
     </div>
-  
+
+    <div class="relative w-full bg-gray-200 h-[10px] rounded-full">
+      <div class="h-[10px] bg-amber-300 rounded-full" style="width: min({{ ratio }}%, 100%)"></div>
+
+      {% for checkpoint in checkpoints %}
+        {% assign checkpoint_value = checkpoint | plus: 0 %}
+        {% assign checkpoint_ratio = checkpoint_value | times: 100 | divided_by: total %}
+        <div class="absolute top-[-6px] w-[2px] h-[20px] bg-gray-400" style="left: {{ checkpoint_ratio | minus: 0.5}}%;"></div>
+      {% endfor %}
+    </div>
+
+    <div class="relative flex justify-around text-[10px] mt-1 text-gray-600">
+        {% assign end_index = checkpoints.size | minus: 1 %}
+
+        {% for i in (0..end_index) %}
+          {% assign checkpoint = checkpoints[i] %}
+          {% assign checkpoint_v = checkpoints_values[i] %}
+
+          {% assign checkpoint_value = checkpoint | plus: 0 %}
+          {% assign checkpoint_ratio = checkpoint_value | times: 100 | divided_by: total %}
+
+          <span class="absolute top-[-35px]" style="left: {{ checkpoint_ratio | minus: 3.5 }}%">
+            ${{ checkpoint }}
+          </span>
+
+          <span class="absolute top-[-1px]" style="left: {{ checkpoint_ratio | minus: 3 }}%">
+            {{ checkpoint_v | truncate: 10 }}
+          </span>
+        {% endfor %}
+
+    </div>
   </div>
 {% endif %}
