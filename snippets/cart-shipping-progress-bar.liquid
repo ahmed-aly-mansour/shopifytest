@@ -1,19 +1,25 @@
-{% assign shipping_threshold = 100 %}
+{% assign shipping_threshold = settings.shipping_threshold %}
 {% assign cart_subtotal_dollars = cart.items_subtotal_price | divided_by: 100.0 %}
 {% assign ratio = cart_subtotal_dollars | divided_by: shipping_threshold | times: 100 %}
-<div class="w-full mb-4">
-  <p class="flex items-center mb-2 text-xs text-gray-700">
-    {% render 'icon-shipping' %}
-    {% if ratio < 100 %}
-      Spend {{ shipping_threshold | minus: cart_subtotal_dollars | times: 100 | money}} to get free shipping!
-    {% else %}
-      Your order is free shipped.
-    {% endif %}
-  </p>
 
-  <div class="w-full bg-gray-200 h-[10px] rounded-full">
+{% if shipping_threshold > 0 %}
+  
+  
+  <div class="w-full mb-4">
+    <p class="flex items-center mb-2 text-xs text-gray-700">
+      {% render 'icon-shipping' %}
+      {% if ratio < 100 %}
+        Spend {{ shipping_threshold | minus: cart_subtotal_dollars | times: 100 | money}} to get free shipping!
+      {% else %}
+        Your order is free shipped.
+      {% endif %}
+    </p>
+
+    <div class="w-full bg-gray-200 h-[10px] rounded-full">
       <div class="h-[10px] bg-amber-300 rounded-full" style="width: min({{ ratio }}%, 100%)">
-          
-      </div>
+            
+        </div>
+    </div>
+  
   </div>
-</div>
+{% endif %}

@@ -54,7 +54,7 @@
                     </div>
                     <div class="w-full my-4 md:w-80">
 
-                        {% render 'cart-shipping-progress-bar' %}
+                        {% render 'cart-shipping-progress-bar', settings: section.settings %}
 
                         {% for block in section.blocks %}
                             {% case block.type %}
@@ -93,6 +93,15 @@
 {% schema %}
     {
         "name": "Cart",
+        "settings": [
+            {
+                "type": "number",
+                "id": "shipping_threshold",
+                "label": "Free Shipping Threshold ($)",
+                "default": 0
+            }
+
+        ],
         "blocks": [
             {
                 "type": "subtotal",
